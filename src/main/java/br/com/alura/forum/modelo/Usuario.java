@@ -1,7 +1,17 @@
 package br.com.alura.forum.modelo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+// A @Entity é utilizada pelo JPA é oq transforma em uma entidade da JPA.
+@Entity
 public class Usuario {
 
+	// Além disso, em cima do atributo que representa a chave primária, tem que ter duas anotações, o @Id e o @GeneratedValue e definir 
+	// Qual a estratégia que vai seguir
+	@Id @GeneratedValue( strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String email;
