@@ -22,6 +22,8 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
 
 // QUando adicionado Request Mapping /topicos na classe ele diz que todos os metodos serão para essa rota
 @RestController
@@ -59,8 +61,9 @@ public class TopicosController {
 	// para mudar o status code devemos responder com um tipo de ReponseEntity
 	// Devemos retornar uma uri no cabeçalho do Reponse de criado, e para isso usamos o uriComponentsBuilder que é do Spring
 	// Recebemos um TopicoForm para não usar a nossa classe de dominio
+	// Usamos @Valid para validar o form recebido com o BeamValidation
 	@PostMapping
-	public ResponseEntity<TopicoDto> cadastrar( @RequestBody TopicoForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<TopicoDto> cadastrar( @Valid @RequestBody TopicoForm form, UriComponentsBuilder uriBuilder) {		
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
 		// criamos uma uri dinamica
