@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+
 import br.com.alura.forum.modelo.Topico;
 
 public class TopicoDto {
@@ -34,7 +36,8 @@ public class TopicoDto {
 	}
 
 	// Usamos as libs de Stream para iterar para cada topico e instanciar o topico DTO retornando para lista
-	public static List<TopicoDto> converter(List<Topico> topicos) {
-		return topicos.stream().map(TopicoDto::new).collect(Collectors.toList());
+	public static Page<TopicoDto> converter(Page<Topico> topicos) {
+		// Quando trocamos de list para page iremos tirar o metodo stream
+		return topicos.map(TopicoDto::new);
 	}
 }
