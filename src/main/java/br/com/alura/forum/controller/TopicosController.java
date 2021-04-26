@@ -2,6 +2,8 @@ package br.com.alura.forum.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +59,9 @@ public class TopicosController {
 	// Forma de chamar via GET
 	// @@RequestParam serve para dizer que os params vem na urls
 	// Usamos @PageableDefault(sort="id", direction = Direction.DESC) para definir a paginacao default quando ele não recebe o padrão
+	// Para Cachearmos o retorno da aplicação, devemos usar o @Cacheable e passamos um value para indicar o nome do cache
 	@GetMapping
+	@Cacheable(value="listaDeTopicos")
 	public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso,
 			@PageableDefault(sort="id", direction = Direction.DESC, page=0, size = 10) Pageable paginacao ){
 		
@@ -84,7 +88,10 @@ public class TopicosController {
 	// Devemos retornar uma uri no cabeçalho do Reponse de criado, e para isso usamos o uriComponentsBuilder que é do Spring
 	// Recebemos um TopicoForm para não usar a nossa classe de dominio
 	// Usamos @Valid para validar o form recebido com o BeamValidation
+	// Usamos o @CacheEvict para limpar o cache que foi criado e passamos no value o nome do cache que será limpo e passamos allEntries para limpar todos registros
 	@PostMapping
+	@Transactional
+	@CacheEvict(value="listaDeTopicos", allEntries = true )
 	public ResponseEntity<TopicoDto> cadastrar( @Valid @RequestBody TopicoForm form, UriComponentsBuilder uriBuilder) {		
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
@@ -113,6 +120,7 @@ public class TopicosController {
 	// Adicionamos @Transctional para comitar alteração após realizar transação
 	@PutMapping("/{id}")
 	@Transactional
+	@CacheEvict(value="listaDeTopicos", allEntries = true )
 	public ResponseEntity<TopicoDto> atualizar( @PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form ){
 		Optional<Topico> optional = topicoRepository.findById(id);
 		if ( optional.isPresent() ) {
@@ -128,6 +136,7 @@ public class TopicosController {
 	// Utilizamos DeleteMappinga para uso do metodo HTTP Delete, adicionamos validação para caso nao encontre
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value="listaDeTopicos", allEntries = true )
 	public ResponseEntity<?> remover(@PathVariable Long id){
 		Optional<Topico> optional = topicoRepository.findById(id);
 		if ( optional.isPresent() ) {
