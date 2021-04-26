@@ -33,6 +33,7 @@ public class TopicoDto {
 		return dataCriacao;
 	}
 
+	// Usamos as libs de Stream para iterar para cada topico e instanciar o topico DTO retornando para lista
 	public static List<TopicoDto> converter(List<Topico> topicos) {
 		return topicos.stream().map(TopicoDto::new).collect(Collectors.toList());
 	}
