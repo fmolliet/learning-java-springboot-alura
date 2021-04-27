@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /*
  * Criaremos uma classe de segurança pois muita coisa é dinamica e para cada projeto
@@ -61,7 +62,9 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 			// Usamos o AnyRequest().authenticated() para dizer ao spring que todas requests nao mapeadas acima precisam de autentificação
 			.anyRequest().authenticated()
 			.and().csrf().disable()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			// Adicionamos antes o filtro que vai realizar a autentificacao do JWT antes de username e senha
+			.and().addFilterBefore(new AutenticacaoViaTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 			// Para usar o formulario padrao para autentificação do spring .and().formLogin();
 			//Assim libera todos os metodos do "/topicos" .antMatchers("/topicos").permitAll();
 	}
