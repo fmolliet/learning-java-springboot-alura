@@ -24,6 +24,7 @@ import br.com.alura.forum.controller.form.LoginForm;
 @RequestMapping("/auth")
 public class AutenticacaoController {
 	
+	// A classe AuthenticationManager deve ser utilizada apenas na lógica de autenticação via username/password, para a geração do token.
 	@Autowired
 	private AuthenticationManager authManager;
 	

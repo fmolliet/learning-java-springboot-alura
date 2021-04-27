@@ -14,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import br.com.alura.forum.repository.UsuarioRepository;
+
 /*
  * Criaremos uma classe de segurança pois muita coisa é dinamica e para cada projeto
  * Nao adicionamos na main do projeto o @EnableWebSecurity
@@ -34,6 +36,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private TokenService tokenService;
 	
+	@Autowired 
+	private UsuarioRepository usuarioRepository;
+	
+	//  A classe AuthenticationManager deve ser utilizada apenas na lógica de autenticação via username/password, para a geração do token.
 	// A classe AuthenticationManager não é possivel fazer injeção de dependencia pois nao vem configurada para isso
 	// Adicionamos @Bean para indicar que ele retorna o AuthenticationManager 
 	@Override
@@ -67,7 +73,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 			.and().csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			// Adicionamos antes o filtro que vai realizar a autentificacao do JWT antes de username e senha
-			.and().addFilterBefore(new AutenticacaoViaTokenFilter( tokenService ), UsernamePasswordAuthenticationFilter.class);
+			.and().addFilterBefore(new AutenticacaoViaTokenFilter( tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 			// Para usar o formulario padrao para autentificação do spring .and().formLogin();
 			//Assim libera todos os metodos do "/topicos" .antMatchers("/topicos").permitAll();
 	}
