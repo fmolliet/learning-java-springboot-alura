@@ -11,6 +11,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 //  O filtro deve ser registrado via método addFilterBefore, na classe SecurityConfigurations. nao existe anotacao para o spring
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
+	
+	private TokenService tokenService;
+	
+	public AutenticacaoViaTokenFilter(TokenService tokenService) {
+		this.tokenService = tokenService;
+	}
+	
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -18,6 +25,10 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 		
 		
 		String token = recuperarToken(request);
+		
+		boolean valido = tokenService.isTokenValido(token);
+		
+		System.out.println(valido);
 		
 		// Como se fosse o Next do Express
 		filterChain.doFilter(request, response);

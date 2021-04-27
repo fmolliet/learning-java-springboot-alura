@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.alura.forum.config.security.TokenServices;
+import br.com.alura.forum.config.security.TokenService;
 import br.com.alura.forum.controller.dto.TokenDto;
 import br.com.alura.forum.controller.form.LoginForm;
 
@@ -29,7 +29,7 @@ public class AutenticacaoController {
 	
 	// O autowired ele procura um Beam para injetar
 	@Autowired
-	private TokenServices tokenServices;
+	private TokenService tokenServices;
 	
 	@PostMapping
 	public ResponseEntity<TokenDto> autenticar( @RequestBody @Valid LoginForm form ){

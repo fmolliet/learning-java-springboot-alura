@@ -11,7 +11,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
-public class TokenServices {
+public class TokenService {
 	
 	// Fazemos assim para buscar uma variavel que est[a no application.proprieties
 	@Value("${forum.jwt.expiration}")
@@ -34,5 +34,17 @@ public class TokenServices {
 					.signWith(SignatureAlgorithm.HS256, secret)
 					.compact();
 	}
+
+	public boolean isTokenValido(String token) {
+		try {
+			Jwts.parser()
+				.setSigningKey(this.secret)
+				.parseClaimsJws(token);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 
 }

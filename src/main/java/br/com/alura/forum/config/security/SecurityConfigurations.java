@@ -31,6 +31,9 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AutenticacaoService autenticacaoService;
 	
+	@Autowired
+	private TokenService tokenService;
+	
 	// A classe AuthenticationManager não é possivel fazer injeção de dependencia pois nao vem configurada para isso
 	// Adicionamos @Bean para indicar que ele retorna o AuthenticationManager 
 	@Override
@@ -64,7 +67,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 			.and().csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			// Adicionamos antes o filtro que vai realizar a autentificacao do JWT antes de username e senha
-			.and().addFilterBefore(new AutenticacaoViaTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+			.and().addFilterBefore(new AutenticacaoViaTokenFilter( tokenService ), UsernamePasswordAuthenticationFilter.class);
 			// Para usar o formulario padrao para autentificação do spring .and().formLogin();
 			//Assim libera todos os metodos do "/topicos" .antMatchers("/topicos").permitAll();
 	}
