@@ -1,8 +1,14 @@
 package br.com.alura.forum.config.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /*
  * Criaremos uma classe de segurança pois muita coisa é dinamica e para cada projeto
@@ -14,5 +20,45 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
+	/*
+	 * Adicionamos como injeção de dependencia
+	 */
+	@Autowired
+	private AutenticacaoService autenticacaoService;
 
+	/*
+	 * Esse metodo controla a autentificação
+	 */
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// usamos o metodo userDetailsService para dizer ao spring qual é classe que tem a lógica de autentificação
+		auth.userDetailsService( autenticacaoService )
+			.passwordEncoder(new BCryptPasswordEncoder());
+	}
+	
+	
+	/*
+	 * Configuração de autorização: URL, quem pode acessar cada URL, perfil de acesso
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+			.antMatchers(HttpMethod.GET, "/topicos").permitAll() // Somente iremos liberar o metodo GET
+			.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
+			// Usamos o AnyRequest().authenticated() para dizer ao spring que todas requests nao mapeadas acima precisam de autentificação
+			.anyRequest().authenticated()
+			// Vamos usar o formulario padrao para autentificação do spring
+			.and().formLogin();
+			//Assim libera todos os metodos do "/topicos" .antMatchers("/topicos").permitAll();
+	}
+	
+	/*
+	 * Configuração de recursos estáticos (JS, CSS, HTML)
+	 */
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		
+	}
+	
 }

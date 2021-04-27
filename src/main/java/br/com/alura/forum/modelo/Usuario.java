@@ -1,13 +1,23 @@
 package br.com.alura.forum.modelo;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 // A @Entity é utilizada pelo JPA é oq transforma em uma entidade da JPA.
+// Implementamos a interface UserDetails do spring security para dizer a spring que essa é a classe de usuário e adicionamos os metodos
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails {
 
 	// Além disso, em cima do atributo que representa a chave primária, tem que ter duas anotações, o @Id e o @GeneratedValue e definir 
 	// Qual a estratégia que vai seguir
@@ -16,6 +26,9 @@ public class Usuario {
 	private String nome;
 	private String email;
 	private String senha;
+	
+	@ManyToMany(fetch = FetchType.EAGER )
+	private List<Perfil> perfis = new ArrayList<>();
 
 	@Override
 	public int hashCode() {
@@ -72,6 +85,42 @@ public class Usuario {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	// Atenção nessa parte que precisa retornar uma collection de Granted Authority, para isso usamos a classe perfil
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.perfis;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
 }
