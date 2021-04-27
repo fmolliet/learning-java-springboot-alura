@@ -4,14 +4,15 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class LoginForm {
 
 
 	// Para realizar as validações no corpo recebido o JAVA utiliza o beam validation e usamos annotations em vez de if else
-	@NotNull @NotEmpty @Length(min=5)
+	@NotNull @NotEmpty
 	private String email;
-	@NotNull @NotEmpty @Length(min=5)
+	@NotNull @NotEmpty
 	private String senha;
 	
 	
@@ -27,6 +28,9 @@ public class LoginForm {
 	}
 	public String getSenha() {
 		return senha;
+	}
+	public UsernamePasswordAuthenticationToken converter() {
+		return new UsernamePasswordAuthenticationToken(email, senha);
 	}
 	
 	
