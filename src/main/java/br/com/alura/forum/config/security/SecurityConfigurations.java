@@ -68,6 +68,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, "/topicos").permitAll() // Somente iremos liberar o metodo GET
 			.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
+			.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/instances/**").permitAll()
 			// Usamos o AnyRequest().authenticated() para dizer ao spring que todas requests nao mapeadas acima precisam de autentificação
 			.anyRequest().authenticated()
 			.and().csrf().disable()
