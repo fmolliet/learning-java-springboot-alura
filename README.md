@@ -3,6 +3,9 @@
 Conteudo que aprendi no curso do Alura de como fazer uma API Rest utilizando Spring boot.
 
 Aulas:
+- https://cursos.alura.com.br/course/spring-boot-api-rest
+- https://cursos.alura.com.br/course/spring-boot-seguranca-cache-monitoramento
+- https://cursos.alura.com.br/course/spring-boot-profiles-testes-deploy
 
 ### Pré-requisitos
 
