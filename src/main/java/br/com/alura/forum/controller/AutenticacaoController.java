@@ -24,7 +24,8 @@ import br.com.alura.forum.controller.form.LoginForm;
 @RestController
 @RequestMapping("/auth")
 // Adicionamos @Profile para pegar o argumento -Dspring.profiles.active= que é passado nas configuração do runner
-@Profile("prod")
+// Voce pode passar 1 ou mais profiles passando como value entre chaves
+@Profile(value = {"prod", "test"})
 public class AutenticacaoController {
 	
 	// A classe AuthenticationManager deve ser utilizada apenas na lógica de autenticação via username/password, para a geração do token.

@@ -27,7 +27,7 @@ import br.com.alura.forum.repository.UsuarioRepository;
 @EnableWebSecurity
 @Configuration
 // A anotação @Profile(“prod”) indica ao Spring que determinada classe deve apenas ser carregada se o profile ativo for prod.
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	
 	/*
